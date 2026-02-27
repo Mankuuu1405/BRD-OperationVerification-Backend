@@ -23,5 +23,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/dashboard/', include('dashboard.urls')),
     path('api/sitevisit/', include('sitevisit.urls')),
-    path('api/rejected/', include('rejected.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

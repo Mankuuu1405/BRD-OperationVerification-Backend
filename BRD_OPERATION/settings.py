@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "dashboard",
     "sitevisit",
-    "rejected",
+    
 ]
 
 MIDDLEWARE = [

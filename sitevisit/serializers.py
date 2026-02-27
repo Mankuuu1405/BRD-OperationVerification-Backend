@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SiteVisitReport, SiteVisitPhoto, Recommendation
+from .models import SiteVisitReport, SiteVisitPhoto, Recommendation, Rejected
 
 
 class SiteVisitPhotoSerializer(serializers.ModelSerializer):
@@ -12,6 +12,12 @@ class RecommendationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recommendation
         fields = ["id", "text"]
+
+class RejectedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rejected
+        fields = ["action", "title"]
+
 
 
 class SiteVisitReportSerializer(serializers.ModelSerializer):

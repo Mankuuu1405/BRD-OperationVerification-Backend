@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import SiteVisitReport, SiteVisitPhoto, Recommendation
+from .models import SiteVisitReport, SiteVisitPhoto, Recommendation, Rejected
 
 
 # ✅ Inline Photos inside Report
@@ -31,7 +31,13 @@ class SiteVisitReportAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at",)
 
     inlines = [SiteVisitPhotoInline, RecommendationInline]
+@admin.register(Rejected)
+class RejectedAdmin(admin.ModelAdmin):
 
+    list_display = (
+       "action",
+       "title",
+    )
 
 @admin.register(SiteVisitPhoto)
 class SiteVisitPhotoAdmin(admin.ModelAdmin):

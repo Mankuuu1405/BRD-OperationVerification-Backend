@@ -2,12 +2,14 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     SiteVisitReportViewSet,
     SiteVisitPhotoViewSet,
-    RecommendationViewSet
+    RecommendationViewSet,
+    RejectedViewSet
 )
 
 router = DefaultRouter()
 router.register(r"site-visits", SiteVisitReportViewSet)
 router.register(r"site-photos", SiteVisitPhotoViewSet)
 router.register(r"recommendations", RecommendationViewSet)
+router.register(r"Rejected", RejectedViewSet)
 
 urlpatterns = router.urls
