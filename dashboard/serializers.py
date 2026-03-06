@@ -1,25 +1,42 @@
 from rest_framework import serializers
 from .models import OperationsDashboard, PendingTask
 
-class OperationsDashboardSerializer(serializers.ModelSerializer):
 
+class OperationsDashboardSerializer(serializers.ModelSerializer):
     class Meta:
         model = OperationsDashboard
         fields = [
-            'pending_tasks',
-            'completed_today',
-            'sla_breaches',
-            'ocr_failures',
-            'created_at'
+            "id",
+            "pending_tasks",
+            "completed_today",
+            "sla_breaches",
+            "ocr_failures",
+            "created_at",
         ]
-        read_only_fields = ['created_at']
+        read_only_fields = ["id", "created_at"]
+
 
 class PendingTaskSerializer(serializers.ModelSerializer):
-
-    tat_remaining = serializers.ReadOnlyField()
+    # tat_remaining is a @property, so declare it as a read-only field
+    tat_remaining = serializers.SerializerMethodField()
 
     class Meta:
         model = PendingTask
-        fields = '__all__'
+        fields = [
+            "id",
+            "task_id",
+            "type",
+            "customer",
+            "priority",
+            "due_date",
+            "action",
+            "tat_remaining",
+        ]
+        read_only_fields = ["id", "task_id", "tat_remaining"]
 
-    
+    def get_tat_remaining(self, obj):
+        # Safely call the property — returns None if due_date is missing
+        try:
+            return obj.tat_remaining
+        except Exception:
+            return None

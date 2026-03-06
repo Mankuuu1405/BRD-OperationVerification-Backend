@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import SiteVisitReport, SiteVisitPhoto, Recommendation,Rejected
+from .models import SiteVisitReport, SiteVisitPhoto, Recommendation, Rejected
 from .serializers import (
     SiteVisitReportSerializer,
     SiteVisitPhotoSerializer,
@@ -24,5 +24,5 @@ class RecommendationViewSet(viewsets.ModelViewSet):
 
 
 class RejectedViewSet(viewsets.ModelViewSet):
-    queryset = Rejected.objects.all()
+    queryset = Rejected.objects.all().order_by("-created_at")
     serializer_class = RejectedSerializer
