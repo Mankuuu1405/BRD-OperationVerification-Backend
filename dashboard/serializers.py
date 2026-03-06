@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import OperationsDashboard, PendingTask
+from .models import OperationsDashboard, PendingTask, SLABreachAlert
 
 
 class OperationsDashboardSerializer(serializers.ModelSerializer):
@@ -14,6 +14,21 @@ class OperationsDashboardSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["id", "created_at"]
+
+class SLABreachAlertSerializer(serializers.ModelSerializer):
+
+    overdue_hours = serializers.SerializerMethodField()
+    is_overdue = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SLABreachAlert
+        fields = "__all__"
+
+    def get_overdue_hours(self, obj):
+        return obj.overdue_hours()
+
+    def get_is_overdue(self, obj):
+        return obj.is_overdue()
 
 
 class PendingTaskSerializer(serializers.ModelSerializer):

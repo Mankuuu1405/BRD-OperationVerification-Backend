@@ -13,7 +13,55 @@ class OperationsDashboard(models.Model):
     def __str__(self):
         return f"Dashboard Summary - {self.created_at.date()}"
 
+from django.db import models
 
+
+class SLABreachAlert(models.Model):
+
+    PRIORITY_CHOICES = [
+        ("CRITICAL", "Critical"),
+        ("HIGH", "High"),
+        ("MEDIUM", "Medium"),
+    ]
+
+    STATUS_CHOICES = [
+        ("PENDING", "Pending"),
+        ("COMPLETED", "Completed"),
+    ]
+
+    task_id = models.CharField(max_length=20, unique=True)
+    title = models.CharField(max_length=255)
+
+    priority = models.CharField(
+        max_length=10,
+        choices=PRIORITY_CHOICES,
+        default="MEDIUM"
+    )
+
+    sla_hours = models.IntegerField(help_text="Allowed SLA time in hours")
+    elapsed_hours = models.IntegerField(help_text="Time already spent in hours")
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="PENDING"
+    )
+
+    is_escalated = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def overdue_hours(self):
+        """Calculate how many hours SLA is exceeded."""
+        if self.elapsed_hours > self.sla_hours:
+            return self.elapsed_hours - self.sla_hours
+        return 0
+
+    def is_overdue(self):
+        return self.elapsed_hours > self.sla_hours
+
+    def __str__(self):
+        return f"{self.task_id} - {self.title}"
 class PendingTask(models.Model):
 
     TYPE_CHOICES = [

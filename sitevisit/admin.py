@@ -1,29 +1,30 @@
 from django.contrib import admin
-from .models import SiteVisitReport, SiteVisitPhoto, Recommendation, Rejected
+from .models import (
+    SiteVisitReport,
+    SiteVisitPhoto,
+    Recommendation,
+    Rejected
+)
 
 
 # -----------------------------
-# Inline for Photos
+# Inline Models
 # -----------------------------
+
 class SiteVisitPhotoInline(admin.TabularInline):
     model = SiteVisitPhoto
     extra = 1
-    fields = ("image", "uploaded_at")
-    readonly_fields = ("uploaded_at",)
 
 
-# -----------------------------
-# Inline for Recommendations
-# -----------------------------
 class RecommendationInline(admin.TabularInline):
     model = Recommendation
     extra = 1
-    fields = ("text",)
 
 
 # -----------------------------
-# Site Visit Report Admin
+# Site Visit Report
 # -----------------------------
+
 @admin.register(SiteVisitReport)
 class SiteVisitReportAdmin(admin.ModelAdmin):
     list_display = (
@@ -31,47 +32,34 @@ class SiteVisitReportAdmin(admin.ModelAdmin):
         "location",
         "visit_date",
         "status",
+        "latitude",
+        "longitude",
+        "created_at",
         "photos_count",
-        "created_at",
     )
+    list_filter = ("status", "visit_date")
+    search_fields = ("title", "location", "observations")
+    readonly_fields = ("created_at",)
+    inlines = [SiteVisitPhotoInline, RecommendationInline]
 
-    list_filter = (
-        "status",
-        "visit_date",
-        "created_at",
-    )
 
-    search_fields = (
-        "title",
-        "location",
-        "observations",
-    )
-
-    readonly_fields = (
-        "created_at",
-    )
-
-    ordering = ("-created_at",)
-
-    inlines = [
-        SiteVisitPhotoInline,
-        RecommendationInline,
-    ]
 
 
 # -----------------------------
-# Site Visit Photo Admin
+# Site Visit Photo
 # -----------------------------
+
 @admin.register(SiteVisitPhoto)
 class SiteVisitPhotoAdmin(admin.ModelAdmin):
-    list_display = ("report", "image", "uploaded_at")
+    list_display = ("report", "uploaded_at")
     search_fields = ("report__title",)
     readonly_fields = ("uploaded_at",)
 
 
 # -----------------------------
-# Recommendation Admin
+# Recommendation
 # -----------------------------
+
 @admin.register(Recommendation)
 class RecommendationAdmin(admin.ModelAdmin):
     list_display = ("text", "report")
@@ -79,8 +67,9 @@ class RecommendationAdmin(admin.ModelAdmin):
 
 
 # -----------------------------
-# Rejected Documents Admin
+# Rejected Documents
 # -----------------------------
+
 @admin.register(Rejected)
 class RejectedAdmin(admin.ModelAdmin):
     list_display = (
@@ -90,20 +79,6 @@ class RejectedAdmin(admin.ModelAdmin):
         "frequency",
         "created_at",
     )
-
-    list_filter = (
-        "doc_type",
-        "created_at",
-    )
-
-    search_fields = (
-        "title",
-        "reason",
-        "description",
-    )
-
-    readonly_fields = (
-        "created_at",
-    )
-
-    ordering = ("-created_at",)
+    list_filter = ("doc_type", "created_at")
+    search_fields = ("title", "reason", "description")
+    readonly_fields = ("created_at",)

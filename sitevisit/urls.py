@@ -11,7 +11,7 @@ router = DefaultRouter()
 router.register(r"site-visits", SiteVisitReportViewSet)
 router.register(r"site-photos", SiteVisitPhotoViewSet)
 router.register(r"recommendations", RecommendationViewSet)
-router.register(r"rejected", RejectedViewSet)
+router.register(r"rejections", RejectedViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
